@@ -11,18 +11,18 @@ module Homeland
       return if env[:is_whitelisted] || !node.element?
 
       # Don't continue unless the node is an iframe.
-      return unless node_name == 'iframe'
+      return unless node_name == "iframe"
 
       # Verify that the video URL is actually a valid YouTube video URL.
       valid_video_url = false
 
       # Youtube
-      if node['src'].match?(%r{\A(?:https?:)?//(?:www\.)?youtube(?:-nocookie)?\.com/embed/})
+      if node["src"].match?(%r{\A(?:https?:)?//(?:www\.)?youtube(?:-nocookie)?\.com/embed/})
         valid_video_url = true
       end
 
       # Youku
-      if node['src'].match?(%r{\A(?:http[s]{0,1}?:)?//player\.youku\.com/embed/})
+      if node["src"].match?(%r{\A(?:http[s]{0,1}?:)?//player\.youku\.com/embed/})
         valid_video_url = true
       end
 
@@ -34,7 +34,7 @@ module Homeland
       ::Sanitize.node!(node, elements: %w(iframe),
 
                              attributes: {
-                               'iframe' => %w(allowfullscreen class frameborder height src width)
+                               "iframe" => %w(allowfullscreen class frameborder height src width)
                              })
 
       # Now that we're sure that this is a valid YouTube embed and that there are
@@ -52,11 +52,11 @@ module Homeland
       attributes: ::Sanitize::Config.merge({},
                                            # 这里要确保是 :all, 而不是 'all'
                                            :all  => %w(class id lang style tabindex title translate),
-                                           'a'   => %w(href rel data-floor target),
-                                           'img' => %w(alt src width height)),
+                                           "a"   => %w(href rel data-floor target),
+                                           "img" => %w(alt src width height)),
 
       protocols: {
-        'a' => { 'href' => ['http', 'https', 'mailto', :relative] }
+        "a" => { "href" => ["http", "https", "mailto", :relative] }
       },
 
       transformers: [EMBED_VIDEO_TRANSFORMER]
